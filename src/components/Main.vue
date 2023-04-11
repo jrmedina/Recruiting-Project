@@ -25,7 +25,7 @@
         </tr>
       </tbody>
     </table>
-    <form v-if="selectedGuest !== null">
+    <!-- <form v-if="selectedGuest !== null">
       <h4>Edit Guest Information</h4>
       <label>Email:</label>
       <input type="email" v-model="selectedGuest.email" />
@@ -34,7 +34,7 @@
       <button @click.prevent="updateGuest()">Update</button>
       <button @click.prevent="cancelUpdate()">Cancel</button>
     </form>
-    <form>
+    <form v-else>
       <h4>Add Guest Information</h4>
       <label>Email:</label>
       <input type="email" v-model="newGuest.email" />
@@ -42,11 +42,13 @@
       <input type="number" v-model="newGuest.tickets" />
       <button @click.prevent="addGuest()">Add Guest</button>
       <button>Cancel</button>
-    </form>
+    </form> -->
+    <Modal/>
   </div>
 </template>
 
 <script>
+import Modal from "./Modal.vue";
 const GuestRepository = require("../guest-repository");
 const repo = new GuestRepository();
 
@@ -62,6 +64,7 @@ export default {
       },
     };
   },
+   components: { Modal },
   async created() {
     this.guests = await repo.load();
   },
@@ -104,3 +107,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+form{
+  border: red solid 2px
+}
+</style>
