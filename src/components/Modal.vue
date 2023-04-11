@@ -2,7 +2,7 @@
   <form class="modal">
     <div class="guest-form">
       <button>x</button>
-      <h3>Guest Information</h3>
+      <h3>{{title}} Guest Information</h3>
       <label>Email:</label>
       <input type="email" />
       <label>Tickets:</label>
@@ -21,5 +21,6 @@ export default {
   data() {
     return {};
   },
+  props: ['title']
 };
 </script>

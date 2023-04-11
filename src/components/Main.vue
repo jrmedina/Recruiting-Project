@@ -25,25 +25,11 @@
         </tr>
       </tbody>
     </table>
-    <!-- <form v-if="selectedGuest !== null">
-      <h4>Edit Guest Information</h4>
-      <label>Email:</label>
-      <input type="email" v-model="selectedGuest.email" />
-      <label>Tickets:</label>
-      <input type="number" v-model="selectedGuest.tickets" />
-      <button @click.prevent="updateGuest()">Update</button>
-      <button @click.prevent="cancelUpdate()">Cancel</button>
-    </form>
-    <form v-else>
-      <h4>Add Guest Information</h4>
-      <label>Email:</label>
-      <input type="email" v-model="newGuest.email" />
-      <label>Tickets:</label>
-      <input type="number" v-model="newGuest.tickets" />
-      <button @click.prevent="addGuest()">Add Guest</button>
-      <button>Cancel</button>
-    </form> -->
-    <Modal/>
+    <button @click="currentModal = 'Add'">Add Guest</button>
+    <Modal
+      v-if="currentModal"
+      :title="currentModal"
+    />
   </div>
 </template>
 
@@ -55,6 +41,7 @@ const repo = new GuestRepository();
 export default {
   data: () => {
     return {
+      currentModal: null,
       maxCapacity: 20,
       guests: [],
       selectedGuest: null,
@@ -64,7 +51,7 @@ export default {
       },
     };
   },
-   components: { Modal },
+  components: { Modal },
   async created() {
     this.guests = await repo.load();
   },
@@ -79,6 +66,7 @@ export default {
   methods: {
     editGuest(index) {
       this.selectedGuest = { index, ...this.guests[index] };
+      this.currentModal = "Edit";
     },
     cancelUpdate() {
       this.selectedGuest = null;
@@ -97,6 +85,7 @@ export default {
       await repo.save(this.guests);
     },
     async updateGuest() {
+        this.currentModal = "Add";
       const index = this.selectedGuest.index;
       const { email, tickets } = this.selectedGuest;
       if (tickets > this.remainingCapacity) return alert("Capacity");
@@ -108,7 +97,7 @@ export default {
 };
 </script>
 <style scoped>
-form{
-  border: red solid 2px
+form {
+  border: red solid 2px;
 }
 </style>
