@@ -7,8 +7,13 @@
       <input type="email" v-model="selector.email" />
       <label>Tickets:</label>
       <input type="number" v-model.number="selector.tickets" />
-      <div class="error"></div>
-      <button class="submit" type="submit" @click="submitInformation()">
+      <div v-if="errorMsg" class="error">{{ errorMsg }}</div>
+      <button
+        :disabled="!isValid"
+        class="submit"
+        type="submit"
+        @click="submitInformation()"
+      >
         Submit
       </button>
     </div>
@@ -21,9 +26,20 @@ export default {
   data() {
     return {
       showModal: false,
+      isValid: false,
+
+      errorMsg: "",
     };
   },
-  props: ["title", "selector"],
+  props: ["title", "selector", "remainingCapacity"],
+  watch: {
+    "selector.email": function() {
+      this.validateForm();
+    },
+    "selector.tickets": function() {
+      this.validateForm();
+    },
+  },
   methods: {
     submitInformation() {
       switch (this.title) {
@@ -42,6 +58,32 @@ export default {
     cancelUpdate() {
       this.$emit("cancel-update");
       this.showModal = false;
+    },
+    validateForm() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      let errorMessage = "";
+      let isValid = true;
+
+      switch (true) {
+        case !emailRegex.test(this.selector.email):
+          errorMessage = "Please enter a valid email address.";
+          isValid = false;
+          break;
+        case !this.selector.tickets || this.selector.tickets < 1:
+          errorMessage = "Please enter a valid number of tickets.";
+          isValid = false;
+          break;
+        case this.selector.tickets > this.remainingCapacity:
+          errorMessage = `The tickets entered exceeds the remaining capacity of ${this.remainingCapacity}`;
+          isValid = false;
+          break;
+        default:
+          errorMessage = "";
+          isValid = true;
+          break;
+      }
+      this.isValid = isValid;
+      this.errorMsg = errorMessage;
     },
   },
 };

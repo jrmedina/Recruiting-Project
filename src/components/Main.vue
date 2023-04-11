@@ -30,6 +30,7 @@
       v-if="currentModal"
       :title="currentModal"
       :selector="selectedGuest"
+      :remaining-capacity="getRemainingCapacity()"
       @update-guest="updateGuest"
       @cancel-update="cancelUpdate"
       @add-guest="addGuest"
@@ -59,10 +60,10 @@ export default {
       return this.guests.reduce((total, guest) => total + guest.tickets, 0);
     },
   },
-  getRemainingCapacity() {
-    return this.maxCapacity - this.totalGuests;
-  },
   methods: {
+    getRemainingCapacity() {
+      return this.maxCapacity - this.totalGuests;
+    },
     handleModalProps(title, index) {
       switch (title) {
         case "Edit":
