@@ -51,7 +51,6 @@ export default {
       selectedGuest: null,
     };
   },
-  components: { Modal },
   async created() {
     this.guests = await repo.load();
   },
@@ -59,9 +58,9 @@ export default {
     totalGuests() {
       return this.guests.reduce((total, guest) => total + guest.tickets, 0);
     },
-    remainingCapacity() {
-      return this.maxCapacity - this.totalGuests;
-    },
+  },
+  getRemainingCapacity() {
+    return this.maxCapacity - this.totalGuests;
   },
   methods: {
     handleModalProps(title, index) {
@@ -69,16 +68,15 @@ export default {
         case "Edit":
           this.selectedGuest = { index, ...this.guests[index] };
           break;
-        default:
+        case "Add":
           this.selectedGuest = { email: "", tickets: 1 };
+          break;
+        default:
           break;
       }
       this.currentModal = title;
     },
-    // editGuest(index) {
-    //   this.selectedGuest = { index, ...this.guests[index] };
-    //   this.currentModal = "Edit";
-    // },
+
     cancelUpdate() {
       this.selectedGuest = null;
       this.currentModal = null;
@@ -91,6 +89,7 @@ export default {
       this.guests.push(this.selectedGuest);
       await repo.save(this.guests);
       this.selectedGuest = { email: "", tickets: 1 };
+      this.currentModal = null;
     },
     async deleteGuest(index) {
       this.guests.splice(index, 1);
@@ -104,5 +103,6 @@ export default {
       this.currentModal = null;
     },
   },
+  components: { Modal },
 };
 </script>

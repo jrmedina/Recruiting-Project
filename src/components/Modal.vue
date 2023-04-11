@@ -26,12 +26,17 @@ export default {
   props: ["title", "selector"],
   methods: {
     submitInformation() {
-      if (this.title === "Edit") {
-        this.$emit("update-guest", this.selector);
-      } else {
-        this.$emit("add-guest");
+      switch (this.title) {
+        case "Edit":
+          this.$emit("update-guest", this.selector);
+          break;
+        case "Add":
+          this.$emit("add-guest");
+          break;
+        default:
+          this.showModal = false;
+          break;
       }
-      this.showModal = false;
     },
 
     cancelUpdate() {
