@@ -25,6 +25,15 @@
         </tr>
       </tbody>
     </table>
+    <form>
+      <h4>Add Guest Information</h4>
+      <label>Email:</label>
+      <input type="email" v-model="newGuest.email" />
+      <label>Tickets:</label>
+      <input type="number" v-model="newGuest.tickets" />
+      <button @click.prevent="addGuest()">Add Guest</button>
+      <button>Cancel</button>
+    </form>
   </div>
 </template>
 
@@ -37,6 +46,10 @@ export default {
     return {
       maxCapacity: 20,
       guests: [],
+      newGuest: {
+        email: "",
+        tickets: 1,
+      },
     };
   },
   async created() {
@@ -45,6 +58,15 @@ export default {
   computed: {
     totalGuests() {
       return this.guests.reduce((total, guest) => total + guest.tickets, 0);
+    },
+  },
+  methods: {
+    async addGuest() {
+      if (!this.newGuest.email)
+        return alert("Please provide an email address for the guest.");
+      this.guests.push(this.newGuest);
+      await repo.save(this.guests);
+      this.newGuest = { email: "", tickets: 1 };
     },
   },
 };
