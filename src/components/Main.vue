@@ -6,12 +6,12 @@
 </template>
 
 <script>
-  // eslint-disable-next-line no-unused-vars
-  const GuestRepository = require('../guest-repository');
+const GuestRepository = require("../guest-repository");
+const repo = new GuestRepository();
 
-  export default {
-    data: () => {
-      return { };
-    },
-  }
+export default {
+  data: () => {
+    return {};
+  },
+};
 </script>
