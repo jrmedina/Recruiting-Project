@@ -19,16 +19,20 @@
             {{ guest.tickets }}
           </td>
           <td>
-            <button @click="editGuest(index)">Edit</button>
+            <button @click="handleModalProps('Edit', index)">Edit</button>
             <button @click="deleteGuest(index)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <button @click="currentModal = 'Add'">Add Guest</button>
+    <button @click="handleModalProps('Add')">Add Guest</button>
     <Modal
       v-if="currentModal"
       :title="currentModal"
+      :selector="selectedGuest"
+      @update-guest="updateGuest"
+      @cancel-update="cancelUpdate"
+      @add-guest="addGuest"
     />
   </div>
 </template>
@@ -45,10 +49,6 @@ export default {
       maxCapacity: 20,
       guests: [],
       selectedGuest: null,
-      newGuest: {
-        email: "",
-        tickets: 1,
-      },
     };
   },
   components: { Modal },
@@ -64,40 +64,45 @@ export default {
     },
   },
   methods: {
-    editGuest(index) {
-      this.selectedGuest = { index, ...this.guests[index] };
-      this.currentModal = "Edit";
+    handleModalProps(title, index) {
+      switch (title) {
+        case "Edit":
+          this.selectedGuest = { index, ...this.guests[index] };
+          break;
+        default:
+          this.selectedGuest = { email: "", tickets: 1 };
+          break;
+      }
+      this.currentModal = title;
     },
+    // editGuest(index) {
+    //   this.selectedGuest = { index, ...this.guests[index] };
+    //   this.currentModal = "Edit";
+    // },
     cancelUpdate() {
       this.selectedGuest = null;
+      this.currentModal = null;
     },
     async addGuest() {
-      if (!this.newGuest.email)
+      if (!this.selectedGuest.email)
         return alert("Please provide an email address for the guest.");
-      if (this.newGuest.tickets > this.remainingCapacity)
+      if (this.selectedGuest.tickets > this.remainingCapacity)
         return alert("Capacity");
-      this.guests.push(this.newGuest);
+      this.guests.push(this.selectedGuest);
       await repo.save(this.guests);
-      this.newGuest = { email: "", tickets: 1 };
+      this.selectedGuest = { email: "", tickets: 1 };
     },
     async deleteGuest(index) {
       this.guests.splice(index, 1);
       await repo.save(this.guests);
     },
     async updateGuest() {
-        this.currentModal = "Add";
-      const index = this.selectedGuest.index;
-      const { email, tickets } = this.selectedGuest;
-      if (tickets > this.remainingCapacity) return alert("Capacity");
-      this.guests.splice(index, 1, { email: email, tickets: Number(tickets) });
+      const { index, ...guest } = this.selectedGuest;
+      this.guests.splice(index, 1, { ...guest });
       await repo.save(this.guests);
       this.selectedGuest = null;
+      this.currentModal = null;
     },
   },
 };
 </script>
-<style scoped>
-form {
-  border: red solid 2px;
-}
-</style>
