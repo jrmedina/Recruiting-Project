@@ -69,15 +69,22 @@ export default {
     totalGuests() {
       return this.guests.reduce((total, guest) => total + guest.tickets, 0);
     },
+    remainingCapacity() {
+      return this.maxCapacity - this.totalGuests;
+    },
   },
   methods: {
     editGuest(index) {
       this.selectedGuest = { index, ...this.guests[index] };
     },
-
+    cancelUpdate() {
+      this.selectedGuest = null;
+    },
     async addGuest() {
       if (!this.newGuest.email)
         return alert("Please provide an email address for the guest.");
+      if (this.newGuest.tickets > this.remainingCapacity)
+        return alert("Capacity");
       this.guests.push(this.newGuest);
       await repo.save(this.guests);
       this.newGuest = { email: "", tickets: 1 };
@@ -89,6 +96,7 @@ export default {
     async updateGuest() {
       const index = this.selectedGuest.index;
       const { email, tickets } = this.selectedGuest;
+      if (tickets > this.remainingCapacity) return alert("Capacity");
       this.guests.splice(index, 1, { email: email, tickets: Number(tickets) });
       await repo.save(this.guests);
       this.selectedGuest = null;
