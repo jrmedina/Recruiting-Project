@@ -83,10 +83,6 @@ export default {
       this.currentModal = null;
     },
     async addGuest() {
-      if (!this.selectedGuest.email)
-        return alert("Please provide an email address for the guest.");
-      if (this.selectedGuest.tickets > this.remainingCapacity)
-        return alert("Capacity");
       this.guests.push(this.selectedGuest);
       await repo.save(this.guests);
       this.selectedGuest = { email: "", tickets: 1 };

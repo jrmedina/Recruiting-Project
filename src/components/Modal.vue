@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { validateGuestData } from '../utils';
+
 export default {
   name: "Modal",
   data() {
@@ -60,30 +62,9 @@ export default {
       this.showModal = false;
     },
     validateForm() {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      let errorMessage = "";
-      let isValid = true;
+          this.errorMsg = validateGuestData(this.selector, this.remainingCapacity)
+      this.isValid = !this.errorMsg;
 
-      switch (true) {
-        case !emailRegex.test(this.selector.email):
-          errorMessage = "Please enter a valid email address.";
-          isValid = false;
-          break;
-        case !this.selector.tickets || this.selector.tickets < 1:
-          errorMessage = "Please enter a valid number of tickets.";
-          isValid = false;
-          break;
-        case this.selector.tickets > this.remainingCapacity:
-          errorMessage = `The tickets entered exceeds the remaining capacity of ${this.remainingCapacity}`;
-          isValid = false;
-          break;
-        default:
-          errorMessage = "";
-          isValid = true;
-          break;
-      }
-      this.isValid = isValid;
-      this.errorMsg = errorMessage;
     },
   },
 };
