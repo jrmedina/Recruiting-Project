@@ -25,7 +25,7 @@
         </tr>
       </tbody>
     </table>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -36,11 +36,16 @@ export default {
   data: () => {
     return {
       maxCapacity: 20,
-      guests: []
+      guests: [],
     };
   },
   async created() {
-    this.guests = await repo.load()
-  }
+    this.guests = await repo.load();
+  },
+  computed: {
+    totalGuests() {
+      return this.guests.reduce((total, guest) => total + guest.tickets, 0);
+    },
+  },
 };
 </script>
