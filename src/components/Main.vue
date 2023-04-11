@@ -19,12 +19,21 @@
             {{ guest.tickets }}
           </td>
           <td>
-            <button>Edit</button>
-            <button>Delete</button>
+            <button @click="editGuest(index)">Edit</button>
+            <button @click="deleteGuest(index)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <form v-if="selectedGuest !== null">
+      <h4>Edit Guest Information</h4>
+      <label>Email:</label>
+      <input type="email" v-model="selectedGuest.email" />
+      <label>Tickets:</label>
+      <input type="number" v-model="selectedGuest.tickets" />
+      <button @click.prevent="updateGuest()">Update</button>
+      <button @click.prevent="cancelUpdate()">Cancel</button>
+    </form>
     <form>
       <h4>Add Guest Information</h4>
       <label>Email:</label>
@@ -46,6 +55,7 @@ export default {
     return {
       maxCapacity: 20,
       guests: [],
+      selectedGuest: null,
       newGuest: {
         email: "",
         tickets: 1,
@@ -61,12 +71,27 @@ export default {
     },
   },
   methods: {
+    editGuest(index) {
+      this.selectedGuest = { index, ...this.guests[index] };
+    },
+
     async addGuest() {
       if (!this.newGuest.email)
         return alert("Please provide an email address for the guest.");
       this.guests.push(this.newGuest);
       await repo.save(this.guests);
       this.newGuest = { email: "", tickets: 1 };
+    },
+    async deleteGuest(index) {
+      this.guests.splice(index, 1);
+      await repo.save(this.guests);
+    },
+    async updateGuest() {
+      const index = this.selectedGuest.index;
+      const { email, tickets } = this.selectedGuest;
+      this.guests.splice(index, 1, { email: email, tickets: Number(tickets) });
+      await repo.save(this.guests);
+      this.selectedGuest = null;
     },
   },
 };
