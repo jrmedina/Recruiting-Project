@@ -42,7 +42,25 @@ export default {
 };
 </script>
 <style scoped>
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .guest-form {
-  border: red solid 2px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  height: 40%;
+  width: 250px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 </style>
