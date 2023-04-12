@@ -103,3 +103,25 @@ export default {
   components: { Modal },
 };
 </script>
+
+<style scoped>
+.guest-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.guests-table {
+  width: 50%;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+td {
+  text-align: center;
+}
+th {
+  text-decoration: underline;
+}
+</style>

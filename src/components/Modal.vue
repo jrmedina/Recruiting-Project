@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="guest-form">
-      <button @click="cancelUpdate()">x</button>
+      <button @click="cancelUpdate()" class="close">x</button>
       <h3>{{ title }} Guest Information</h3>
       <label>Email:</label>
       <input type="email" v-model="selector.email" />
@@ -21,19 +21,19 @@
 </template>
 
 <script>
-import { validateGuestData } from '../utils';
+import { validateGuestData } from "../utils";
 
 export default {
   name: "Modal",
+  props: ["title", "selector", "remainingCapacity"],
   data() {
     return {
       showModal: false,
-      isValid: false,
-
       errorMsg: "",
+      isValid: false,
     };
   },
-  props: ["title", "selector", "remainingCapacity"],
+
   watch: {
     "selector.email": function() {
       this.validateForm();
@@ -62,9 +62,8 @@ export default {
       this.showModal = false;
     },
     validateForm() {
-          this.errorMsg = validateGuestData(this.selector, this.remainingCapacity)
+      this.errorMsg = validateGuestData(this.selector, this.remainingCapacity);
       this.isValid = !this.errorMsg;
-
     },
   },
 };
@@ -90,5 +89,27 @@ export default {
   height: 40%;
   width: 250px;
   box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+.close {
+  align-self: flex-end;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: crimson;
+  margin: 5px;
+  background-color: #fff;
+  border-radius: 0.25rem;
+  border: 1px solid crimson;
+  width: 40px;
+}
+
+.close:hover {
+  color: white;
+  background-color: crimson;
+}
+
+.submit {
+  align-self: center;
+  width: 50%;
 }
 </style>
