@@ -35,8 +35,10 @@
       @cancel-update="cancelUpdate"
       @add-guest="addGuest"
     />
+    <img src="" alt="">
   </div>
-</template>
+  </template>
+
 
 <script>
 import Modal from "./Modal.vue";

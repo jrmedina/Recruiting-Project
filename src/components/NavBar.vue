@@ -10,8 +10,10 @@
 </style>
 
 <template>
-  <div class="nav-bar">
-    iScout Recruiting Project
-  </div>
+  <header>
+  <h1 class="nav-bar">
+   Nyan Cat House Party 🎉
+  </h1>
+  </header>
 </template>
 
