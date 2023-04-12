@@ -16,10 +16,12 @@ button {
   font-size: 15px;
   line-height: 30px;
   margin: 5px;
+  transition: transform 0.3s ease-in-out;
 }
 
 button:hover {
   background-color: #f4f6f9;
+  transform: scale(1.1);
 }
 
 input {
@@ -33,21 +35,17 @@ input {
     <NavBar />
     <br />
     <Main />
-    <br />
-    <Footer />
   </div>
 </template>
 
 <script>
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
-import Footer from "./components/Footer";
 
 export default {
   components: {
     Main,
     NavBar,
-    Footer,
   },
 };
 </script>

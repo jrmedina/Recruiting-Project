@@ -5,6 +5,7 @@
       Capacity: {{ maxCapacity }}<br />
       Total Number of Guests: {{ totalGuests }}
     </h3>
+    <div class="message" v-if="message">{{ message }}</div>
     <table class="guests-table">
       <thead>
         <tr>
@@ -28,6 +29,7 @@
         </tr>
       </tbody>
     </table>
+
     <button @click="handleModalProps('Add')">Add Guest</button>
     <Modal
       v-if="currentModal"
@@ -35,7 +37,7 @@
       :selector="selectedGuest"
       :remaining-capacity="getRemainingCapacity()"
       @update-guest="updateGuest"
-      @cancel-update="cancelUpdate"
+      @close-modal="closeModal"
       @add-guest="addGuest"
     />
   </div>
@@ -43,16 +45,17 @@
 
 <script>
 import Modal from "./Modal.vue";
-const GuestRepository = require("../guest-repository");
+import GuestRepository from "../guest-repository";
 const repo = new GuestRepository();
 
 export default {
-  data: () => {
+  data() {
     return {
       currentModal: null,
       maxCapacity: 20,
       guests: [],
       selectedGuest: null,
+      message: "",
     };
   },
   async created() {
@@ -81,26 +84,33 @@ export default {
       this.currentModal = title;
     },
 
-    cancelUpdate() {
+    closeModal() {
       this.selectedGuest = null;
       this.currentModal = null;
     },
     async addGuest() {
       this.guests.push(this.selectedGuest);
       await repo.save(this.guests);
-      this.selectedGuest = { email: "", tickets: 0 };
-      this.currentModal = null;
+      this.closeModal();
+      this.handleMessage("Guest has been added!");
     },
     async deleteGuest(index) {
       this.guests.splice(index, 1);
       await repo.save(this.guests);
+      this.handleMessage("Guest has been deleted!");
     },
     async updateGuest() {
       const { index, ...guest } = this.selectedGuest;
       this.guests.splice(index, 1, { ...guest });
       await repo.save(this.guests);
-      this.selectedGuest = null;
-      this.currentModal = null;
+      this.closeModal();
+      this.handleMessage("Guest has been updated!");
+    },
+    handleMessage(msgToBeDisplayed) {
+      this.message = msgToBeDisplayed;
+      setTimeout(() => {
+        this.message = "";
+      }, 3000);
     },
   },
   components: { Modal },
@@ -108,6 +118,10 @@ export default {
 </script>
 
 <style scoped>
+.message {
+  color: green;
+  font-weight: bold;
+}
 .guest-list {
   display: flex;
   flex-direction: column;

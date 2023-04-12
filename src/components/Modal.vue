@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="guest-form">
-      <button @click="cancelUpdate" class="close">x</button>
+      <button @click="handleCancelUpdate" class="close">x</button>
       <h3>{{ `${title} Guest Information` }}</h3>
       <label>Email:</label>
       <input type="email" v-model="selector.email" />
@@ -31,7 +31,14 @@ import { validateGuestData } from "../utils";
 
 export default {
   name: "Modal",
-  props: ["title", "selector", "remainingCapacity"],
+  props: {
+    title: String,
+    selector: Object,
+    remainingCapacity: Number,
+    updateGuest: Function,
+    closeModal: Function,
+    addGuest: Function,
+  },
   data() {
     return {
       isValid: false,
@@ -75,8 +82,8 @@ export default {
       }
     },
 
-    cancelUpdate() {
-      this.$emit("cancel-update");
+    handleCancelUpdate() {
+      this.$emit("close-modal");
     },
     validateForm() {
       this.errorMsg = validateGuestData(
@@ -93,7 +100,14 @@ export default {
 .tickets {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-weight: bold;
+}
+.tickets button {
+  padding: 7px;
+  font-size: larger;
+  font-weight: bold;
+  margin: 10px;
 }
 .modal {
   position: fixed;
