@@ -31,9 +31,7 @@ input {
 <template>
   <div class="app">
     <NavBar />
-
     <br />
-
     <Main />
     <br />
     <Footer />

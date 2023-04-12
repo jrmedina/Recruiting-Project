@@ -1,12 +1,14 @@
 export function validateGuestData(guestData, remainingCapacity) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   switch (true) {
-    case guestData.tickets > remainingCapacity:
-      return `The tickets entered exceeds the remaining capacity of ${remainingCapacity}`;
-    case !guestData.tickets || guestData.tickets < 1:
-      return "Please enter a valid number of tickets.";
     case !emailRegex.test(guestData.email):
       return "Please enter a valid email address.";
+    case guestData.tickets === 0 && remainingCapacity === 0:
+      return "There are no tickets left.";
+    case !guestData.tickets || guestData.tickets < 0:
+      return "Please enter a valid number of tickets.";
+    case remainingCapacity === 0:
+      return "You got the last ticket!";
     default:
       return "";
   }

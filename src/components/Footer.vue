@@ -1,22 +1,14 @@
 <template>
-
-  
-  <div class="footer">
-      <p>Joshua Medina</p>
+  <footer class="footer">
+    <p>Joshua Medina</p>
     <a href="https://www.linkedin.com/in/joshua-medina/">
-      <img
-        src="../assets/linkedin.png"
-        alt=""
-      />
+      <img src="../assets/linkedin.png" alt="" />
     </a>
 
     <a href="https://github.com/jrmedina/">
-      <img
-        src="../assets/github.svg"
-        alt=""
-      />
+      <img src="../assets/github.svg" alt="" />
     </a>
-  </div>
+  </footer>
 </template>
 
 <script>
@@ -28,20 +20,18 @@ export default {
 <style scoped>
 img {
   height: 25px;
-  margin:3px;
+  margin: 3px;
 }
-
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   text-align: center;
-  background-color: white;
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
+
 p {
-    margin: 0;
-  margin-bottom: 5px;
+  margin: 0;
 }
 </style>

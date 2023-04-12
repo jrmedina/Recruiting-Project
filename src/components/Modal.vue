@@ -1,12 +1,18 @@
 <template>
   <div class="modal">
     <div class="guest-form">
-      <button @click="cancelUpdate()" class="close">x</button>
-      <h3>{{ title }} Guest Information</h3>
+      <button @click="cancelUpdate" class="close">x</button>
+      <h3>{{ `${title} Guest Information` }}</h3>
       <label>Email:</label>
       <input type="email" v-model="selector.email" />
       <label>Tickets:</label>
-      <input type="number" v-model.number="selector.tickets" />
+      <div class="tickets">
+        <button @click="handleDecrease()">−</button>
+        <p>{{ selector.tickets }}</p>
+        <button @click="handleIncrease()" :disabled="isIncreaseDisabled">
+          +
+        </button>
+      </div>
       <div v-if="errorMsg" class="error">{{ errorMsg }}</div>
       <button
         :disabled="!isValid"
@@ -28,10 +34,15 @@ export default {
   props: ["title", "selector", "remainingCapacity"],
   data() {
     return {
-      showModal: false,
-      errorMsg: "",
       isValid: false,
+      localRemainingCapacity: this.remainingCapacity,
+      errorMsg: "",
     };
+  },
+  computed: {
+    isIncreaseDisabled() {
+      return this.localRemainingCapacity === 0;
+    },
   },
 
   watch: {
@@ -43,6 +54,14 @@ export default {
     },
   },
   methods: {
+    handleDecrease() {
+      this.selector.tickets--;
+      this.localRemainingCapacity++;
+    },
+    handleIncrease() {
+      this.selector.tickets++;
+      this.localRemainingCapacity--;
+    },
     submitInformation() {
       switch (this.title) {
         case "Edit":
@@ -52,23 +71,30 @@ export default {
           this.$emit("add-guest");
           break;
         default:
-          this.showModal = false;
           break;
       }
     },
 
     cancelUpdate() {
       this.$emit("cancel-update");
-      this.showModal = false;
     },
     validateForm() {
-      this.errorMsg = validateGuestData(this.selector, this.remainingCapacity);
-      this.isValid = !this.errorMsg;
+      this.errorMsg = validateGuestData(
+        this.selector,
+        this.localRemainingCapacity
+      );
+      this.isValid =
+        !this.errorMsg || this.errorMsg === "You got the last ticket!";
     },
   },
 };
 </script>
 <style scoped>
+.tickets {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
 .modal {
   position: fixed;
   top: 0;

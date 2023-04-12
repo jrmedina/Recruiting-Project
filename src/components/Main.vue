@@ -1,7 +1,10 @@
 <template>
   <div class="guest-list">
     <h2>Guest List</h2>
-    <h3>Total Number of Guests: {{ totalGuests }}</h3>
+    <h3>
+      Capacity: {{ maxCapacity }}<br />
+      Total Number of Guests: {{ totalGuests }}
+    </h3>
     <table class="guests-table">
       <thead>
         <tr>
@@ -35,10 +38,8 @@
       @cancel-update="cancelUpdate"
       @add-guest="addGuest"
     />
-
   </div>
-  </template>
-
+</template>
 
 <script>
 import Modal from "./Modal.vue";
@@ -72,7 +73,7 @@ export default {
           this.selectedGuest = { index, ...this.guests[index] };
           break;
         case "Add":
-          this.selectedGuest = { email: "", tickets: 1 };
+          this.selectedGuest = { email: "", tickets: 0 };
           break;
         default:
           break;
@@ -87,7 +88,7 @@ export default {
     async addGuest() {
       this.guests.push(this.selectedGuest);
       await repo.save(this.guests);
-      this.selectedGuest = { email: "", tickets: 1 };
+      this.selectedGuest = { email: "", tickets: 0 };
       this.currentModal = null;
     },
     async deleteGuest(index) {
@@ -111,6 +112,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 .guests-table {
   width: 50%;
