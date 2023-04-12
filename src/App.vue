@@ -1,11 +1,11 @@
-<style >
-  div.app {
-    max-width:1000px;
-    margin:auto;
-    font-family: sans-serif;
-  }
+<style>
+div.app {
+  max-width: 1000px;
+  margin: auto;
+  font-family: sans-serif;
+}
 
-  button {
+button {
   display: inline-block;
   outline: none;
   cursor: pointer;
@@ -23,8 +23,8 @@ button:hover {
 }
 
 input {
-  margin:5px;
-  height:20px;
+  margin: 5px;
+  height: 20px;
 }
 </style>
 
@@ -35,17 +35,21 @@ input {
     <br />
 
     <Main />
+    <br />
+    <Footer />
   </div>
 </template>
 
 <script>
-import NavBar from './components/NavBar';
-import Main from './components/Main';
+import NavBar from "./components/NavBar";
+import Main from "./components/Main";
+import Footer from "./components/Footer";
 
 export default {
   components: {
     Main,
     NavBar,
+    Footer,
   },
 };
 </script>

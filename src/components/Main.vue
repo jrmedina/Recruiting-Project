@@ -35,7 +35,7 @@
       @cancel-update="cancelUpdate"
       @add-guest="addGuest"
     />
-    <img src="" alt="">
+
   </div>
   </template>
 
