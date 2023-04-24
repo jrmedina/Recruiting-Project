@@ -6,12 +6,12 @@
       </button>
       <h3>{{ `${action} Guest Information` }}</h3>
       <label for="email-input">Email:</label>
-      <input type="email" id="email-input" v-model="selector.email" required />
+      <input type="email" id="email-input" v-model="guest.email" required />
       <label for="tickets-input">Tickets:</label>
       <div class="tickets">
         <button @click="handleDecrease()" aria-label="Minus Tickets">−</button>
         <p aria-label="Number of Tickets" role="status" tabindex="0">
-          {{ selector.tickets }}
+          {{ guest.tickets }}
         </p>
         <button
           @click="handleIncrease()"
@@ -39,11 +39,12 @@
 <script>
 import { validateGuestData } from "../utils";
 
+
 export default {
   name: "Modal",
   props: {
     action: String,
-    selector: Object,
+    guest: Object,
     remainingCapacity: Number,
     updateGuest: Function,
     closeModal: Function,
@@ -63,21 +64,21 @@ export default {
   },
 
   watch: {
-    "selector.email": function() {
+    "guest.email": function() {
       this.validateForm();
     },
-    "selector.tickets": function() {
+    "guest.tickets": function() {
       this.validateForm();
     },
   },
   methods: {
     handleDecrease() {
-      this.selector.tickets--;
+      this.guest.tickets--;
       this.localRemainingCapacity++;
     },
 
     handleIncrease() {
-      this.selector.tickets++;
+      this.guest.tickets++;
       this.localRemainingCapacity--;
     },
 
@@ -88,7 +89,7 @@ export default {
     submitInformation() {
       switch (this.action) {
         case "Edit":
-          this.$emit("update-guest", this.selector);
+          this.$emit("update-guest", this.guest);
           break;
         case "Add":
           this.$emit("add-guest");
@@ -100,7 +101,7 @@ export default {
 
     validateForm() {
       this.message = validateGuestData(
-        this.selector,
+        this.guest,
         this.localRemainingCapacity
       );
 
