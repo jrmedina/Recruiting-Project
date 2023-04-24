@@ -5,15 +5,13 @@
       Capacity: {{ maxCapacity }}<br />
       Total Number of Guests: {{ totalGuests }}
     </h3>
-    <div class="message" v-if="message">{{ message }}</div>
+    <p class="message" v-if="message" role="alert" aria-live="assertive">{{ message }}</p>
     <table class="guests-table">
       <thead>
         <tr>
-          <th>Email</th>
-          <th>Number of Tickets</th>
-          <th>
-            Actions
-          </th>
+          <th scope="col">Email</th>
+          <th scope="col">Number of Tickets</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -29,11 +27,13 @@
         </tr>
       </tbody>
     </table>
-
+  <p class="message" v-if="totalGuests === maxCapacity" role="alert" aria-live="assertive">You are at capacity</p>
     <button @click="handleModalProps('Add')">Add Guest</button>
+
+
     <Modal
       v-if="currentModal"
-      :title="currentModal"
+      :action="currentModal"
       :selector="selectedGuest"
       :remaining-capacity="getRemainingCapacity()"
       @update-guest="updateGuest"
@@ -52,9 +52,9 @@ export default {
   data() {
     return {
       currentModal: null,
+      selectedGuest: null,
       maxCapacity: 20,
       guests: [],
-      selectedGuest: null,
       message: "",
     };
   },
@@ -71,8 +71,8 @@ export default {
       return this.maxCapacity - this.totalGuests;
     },
 
-    handleModalProps(title, index) {
-      switch (title) {
+    handleModalProps(action, index) {
+      switch (action) {
         case "Edit":
           this.selectedGuest = { index, ...this.guests[index] };
           break;
@@ -82,24 +82,27 @@ export default {
         default:
           break;
       }
-      this.currentModal = title;
+      this.currentModal = action;
     },
 
     closeModal() {
       this.selectedGuest = null;
       this.currentModal = null;
     },
+
     async addGuest() {
       this.guests.push(this.selectedGuest);
       await repo.save(this.guests);
       this.closeModal();
       this.handleMessage("Guest has been added!");
     },
+
     async deleteGuest(index) {
       this.guests.splice(index, 1);
       await repo.save(this.guests);
       this.handleMessage("Guest has been deleted!");
     },
+
     async updateGuest() {
       const { index, ...guest } = this.selectedGuest;
       this.guests.splice(index, 1, { ...guest });
@@ -107,6 +110,7 @@ export default {
       this.closeModal();
       this.handleMessage("Guest has been updated!");
     },
+
     handleMessage(msgToBeDisplayed) {
       this.message = msgToBeDisplayed;
       setTimeout(() => {

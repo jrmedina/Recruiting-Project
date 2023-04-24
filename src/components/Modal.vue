@@ -1,19 +1,29 @@
 <template>
-  <div class="modal">
+  <dialog class="modal" role="dialog" aria-modal="true">
     <div class="guest-form">
-      <button @click="handleCancelUpdate" class="close" aria-label="Exit">x</button>
-      <h3>{{ `${title} Guest Information` }}</h3>
-      <label>Email:</label>
-      <input type="email" v-model="selector.email" />
-      <label>Tickets:</label>
+      <button @click="handleCancelUpdate" class="close" aria-label="Exit">
+        x
+      </button>
+      <h3>{{ `${action} Guest Information` }}</h3>
+      <label for="email-input">Email:</label>
+      <input type="email" id="email-input" v-model="selector.email" required />
+      <label for="tickets-input">Tickets:</label>
       <div class="tickets">
         <button @click="handleDecrease()" aria-label="Minus Tickets">−</button>
-        <p aria-label="Number of Tickets"   tabindex="0">{{ selector.tickets }}</p>
-        <button @click="handleIncrease()" :disabled="isIncreaseDisabled" aria-label="Add Tickets">
+        <p aria-label="Number of Tickets" tabindex="0">
+          {{ selector.tickets }}
+        </p>
+        <button
+          @click="handleIncrease()"
+          :disabled="isIncreaseDisabled"
+          aria-label="Add Tickets"
+        >
           +
         </button>
       </div>
-      <div v-if="errorMsg" class="error" tabindex="0">{{ errorMsg }}</div>
+      <p v-if="message" tabindex="0" role="alert" aria-live="assertive">
+        {{ message }}
+      </p>
       <button
         :disabled="!isValid"
         class="submit"
@@ -23,7 +33,7 @@
         Submit
       </button>
     </div>
-  </div>
+  </dialog>
 </template>
 
 <script>
@@ -32,7 +42,7 @@ import { validateGuestData } from "../utils";
 export default {
   name: "Modal",
   props: {
-    title: String,
+    action: String,
     selector: Object,
     remainingCapacity: Number,
     updateGuest: Function,
@@ -43,7 +53,7 @@ export default {
     return {
       isValid: false,
       localRemainingCapacity: this.remainingCapacity,
-      errorMsg: "",
+      message: "",
     };
   },
   computed: {
@@ -65,12 +75,14 @@ export default {
       this.selector.tickets--;
       this.localRemainingCapacity++;
     },
+
     handleIncrease() {
       this.selector.tickets++;
       this.localRemainingCapacity--;
     },
+
     submitInformation() {
-      switch (this.title) {
+      switch (this.action) {
         case "Edit":
           this.$emit("update-guest", this.selector);
           break;
@@ -85,17 +97,20 @@ export default {
     handleCancelUpdate() {
       this.$emit("close-modal");
     },
+
     validateForm() {
-      this.errorMsg = validateGuestData(
+      this.message = validateGuestData(
         this.selector,
         this.localRemainingCapacity
       );
+
       this.isValid =
-        !this.errorMsg || this.errorMsg === "You got the last ticket!";
+        !this.message || this.message === "You got the last ticket!";
     },
   },
 };
 </script>
+
 <style scoped>
 .tickets {
   display: flex;
