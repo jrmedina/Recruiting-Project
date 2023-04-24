@@ -16,10 +16,10 @@ h1 {
 </style>
 
 <template>
-  <header class="nav-bar">
+  <header class="nav-bar" tabindex="0">
     <h1>
       Nyan Cat House Party 🎉
     </h1>
-    <img src="../assets/nyancat.gif" alt="" />
+    <img src="../assets/nyancat.gif" alt="nyancat" />
   </header>
 </template>

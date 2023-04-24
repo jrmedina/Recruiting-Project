@@ -1,19 +1,19 @@
 <template>
   <div class="modal">
     <div class="guest-form">
-      <button @click="handleCancelUpdate" class="close">x</button>
+      <button @click="handleCancelUpdate" class="close" aria-label="Exit">x</button>
       <h3>{{ `${title} Guest Information` }}</h3>
       <label>Email:</label>
       <input type="email" v-model="selector.email" />
       <label>Tickets:</label>
       <div class="tickets">
-        <button @click="handleDecrease()">−</button>
-        <p>{{ selector.tickets }}</p>
-        <button @click="handleIncrease()" :disabled="isIncreaseDisabled">
+        <button @click="handleDecrease()" aria-label="Minus Tickets">−</button>
+        <p aria-label="Number of Tickets"   tabindex="0">{{ selector.tickets }}</p>
+        <button @click="handleIncrease()" :disabled="isIncreaseDisabled" aria-label="Add Tickets">
           +
         </button>
       </div>
-      <div v-if="errorMsg" class="error">{{ errorMsg }}</div>
+      <div v-if="errorMsg" class="error" tabindex="0">{{ errorMsg }}</div>
       <button
         :disabled="!isValid"
         class="submit"

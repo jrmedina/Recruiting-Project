@@ -1,5 +1,5 @@
 <template>
-  <div class="guest-list">
+  <div class="guest-list" tabindex="0">
     <h2>Guest List</h2>
     <h3>
       Capacity: {{ maxCapacity }}<br />
@@ -70,6 +70,7 @@ export default {
     getRemainingCapacity() {
       return this.maxCapacity - this.totalGuests;
     },
+
     handleModalProps(title, index) {
       switch (title) {
         case "Edit":
