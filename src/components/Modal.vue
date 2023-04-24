@@ -1,6 +1,6 @@
 <template>
-  <dialog class="modal" role="dialog" aria-modal="true">
-    <div class="guest-form">
+  <div class="modal">
+    <dialog role="dialog" aria-modal="true" class="guest-form">
       <button @click="handleCancelUpdate" class="close" aria-label="Exit">
         x
       </button>
@@ -10,7 +10,7 @@
       <label for="tickets-input">Tickets:</label>
       <div class="tickets">
         <button @click="handleDecrease()" aria-label="Minus Tickets">−</button>
-        <p aria-label="Number of Tickets" tabindex="0">
+        <p aria-label="Number of Tickets" role="status" tabindex="0">
           {{ selector.tickets }}
         </p>
         <button
@@ -32,8 +32,8 @@
       >
         Submit
       </button>
-    </div>
-  </dialog>
+    </dialog>
+  </div>
 </template>
 
 <script>
@@ -81,6 +81,10 @@ export default {
       this.localRemainingCapacity--;
     },
 
+    handleCancelUpdate() {
+      this.$emit("close-modal");
+    },
+
     submitInformation() {
       switch (this.action) {
         case "Edit":
@@ -92,10 +96,6 @@ export default {
         default:
           break;
       }
-    },
-
-    handleCancelUpdate() {
-      this.$emit("close-modal");
     },
 
     validateForm() {
@@ -157,12 +157,10 @@ export default {
   border: 1px solid crimson;
   width: 40px;
 }
-
 .close:hover {
   color: white;
   background-color: crimson;
 }
-
 .submit {
   align-self: center;
   width: 50%;

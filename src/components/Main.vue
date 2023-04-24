@@ -5,7 +5,9 @@
       Capacity: {{ maxCapacity }}<br />
       Total Number of Guests: {{ totalGuests }}
     </h3>
-    <p class="message" v-if="message" role="alert" aria-live="assertive">{{ message }}</p>
+    <p class="message" v-if="message" role="alert" aria-live="assertive">
+      {{ message }}
+    </p>
     <table class="guests-table">
       <thead>
         <tr>
@@ -27,9 +29,15 @@
         </tr>
       </tbody>
     </table>
-  <p class="message" v-if="totalGuests === maxCapacity" role="alert" aria-live="assertive">You are at capacity</p>
-    <button @click="handleModalProps('Add')">Add Guest</button>
-
+    <p
+      class="message"
+      v-if="isCapacityReached"
+      role="alert"
+      aria-live="assertive"
+    >
+      You are at capacity.
+    </p>
+    <button @click="handleModalProps('Add')" :disabled="isCapacityReached">Add Guest</button>
 
     <Modal
       v-if="currentModal"
@@ -65,6 +73,10 @@ export default {
     totalGuests() {
       return this.guests.reduce((total, guest) => total + guest.tickets, 0);
     },
+
+    isCapacityReached(){
+      return this.totalGuests === this.maxCapacity
+    }
   },
   methods: {
     getRemainingCapacity() {
@@ -96,7 +108,16 @@ export default {
       this.closeModal();
       this.handleMessage("Guest has been added!");
     },
-
+    //async addGuest() {
+    //   try {
+    //     this.guests.push(this.selectedGuest);
+    //     await repo.save(this.guests);
+    //     this.closeModal();
+    //     this.handleMessage("Guest has been added!");
+    //   } catch (error) {
+    // this.handleMessage(error);
+    //   }
+    // },
     async deleteGuest(index) {
       this.guests.splice(index, 1);
       await repo.save(this.guests);
