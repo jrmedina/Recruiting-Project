@@ -1,5 +1,5 @@
 <template>
-  <div class="guest-list" tabindex="0">
+  <main class="guest-list" tabindex="0">
     <h2>Guest List</h2>
     <h3>
       Capacity: {{ maxCapacity }}<br />
@@ -50,7 +50,7 @@
       @close-modal="closeModal"
       @add-guest="addGuest"
     />
-  </div>
+  </main>
 </template>
 
 <script>
