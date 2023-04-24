@@ -56,9 +56,8 @@
 <script>
 import Modal from "./Modal.vue";
 import GuestRepository from "../guest-repository";
-import Guest from "../classes/guest"
+import Guest from "../classes/guest";
 const repo = new GuestRepository();
-
 
 export default {
   data() {
@@ -71,10 +70,8 @@ export default {
     };
   },
   async created() {
-    const data = await repo.load()
-    this.guests = data.map(guest => new Guest(guest.email, guest.tickets));
-
-
+    const data = await repo.load();
+    this.guests = data.map((guest) => new Guest(guest.email, guest.tickets));
   },
   computed: {
     totalGuests() {
@@ -96,7 +93,7 @@ export default {
           this.selectedGuest = { index, ...this.guests[index] };
           break;
         case "Add":
-          this.selectedGuest = new Guest('', 0);
+          this.selectedGuest = new Guest("", 0);
           break;
         default:
           break;
@@ -124,10 +121,12 @@ export default {
 
     async updateGuest() {
       const { index, ...guest } = this.selectedGuest;
-      this.guests.splice(index, 1, { ...guest });
+      this.guests.splice(index, 1, new Guest(guest.email, guest.tickets));
       await repo.save(this.guests);
       this.closeModal();
       this.handleMessage("Guest has been updated!");
+      console.log(this.guests, guest);
+      
     },
 
     handleMessage(msgToBeDisplayed) {
